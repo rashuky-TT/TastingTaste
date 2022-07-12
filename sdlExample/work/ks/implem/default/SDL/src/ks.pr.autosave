@@ -1,0 +1,61 @@
+/* CIF PROCESS (250, 150), (150, 75) */
+process Ks;
+    /* CIF TEXT (686, 8), (267, 140) */
+    dcl pitch PITCH_SEQ;
+    dcl targetPitch PITCH_VALUE;
+    /* CIF ENDTEXT */
+    /* CIF procedure (1099, 282), (128, 38) */
+    procedure ControlProcedure;
+        /* CIF START (256, 155), (70, 35) */
+        START;
+            /* CIF decision (199, 216), (183, 50) */
+            decision pitch.pitchVal < targetPitch;
+                /* CIF ANSWER (89, 286), (70, 23) */
+                (true):
+                    /* CIF task (6, 329), (234, 35) */
+                    task pitch.pitchVal  := pitch.pitchVal  +1.0;
+                /* CIF ANSWER (378, 286), (70, 23) */
+                (false):
+                    /* CIF decision (321, 329), (183, 50) */
+                    decision pitch.pitchVal > targetPitch;
+                        /* CIF ANSWER (333, 399), (70, 23) */
+                        (true):
+                            /* CIF task (252, 442), (231, 35) */
+                            task pitch.pitchVal := pitch.pitchVal  - 1.0;
+                        /* CIF ANSWER (489, 399), (70, 23) */
+                        (false):
+                    enddecision;
+            enddecision;
+            /* CIF return (273, 508), (35, 35) */
+            return ;
+    endprocedure;
+    /* CIF START (320, 10), (70, 35) */
+    START;
+        /* CIF NEXTSTATE (320, 60), (70, 35) */
+        NEXTSTATE Idle;
+    /* CIF state (450, 10), (70, 38) */
+    state Idle;
+    endstate;
+    /* CIF state (718, 364), (70, 35) */
+    state Control;
+        /* CIF input (596, 419), (179, 35) */
+        input SetPitchValue(targetpitch);
+            /* CIF NEXTSTATE (651, 474), (70, 35) */
+            NEXTSTATE Control;
+        /* CIF input (795, 419), (126, 35) */
+        input PitchControlLoop;
+            /* CIF PROCEDURECALL (795, 474), (128, 35) */
+            call Controlprocedure;
+            /* CIF output (786, 529), (144, 35) */
+            output GetPitchValue(pitch);
+            /* CIF NEXTSTATE (824, 584), (70, 35) */
+            NEXTSTATE Control;
+    endstate;
+    /* CIF state (542, 171), (70, 35) */
+    state Idle;
+        /* CIF input (510, 226), (126, 35) */
+        input PitchControlLoop;
+            /* CIF NEXTSTATE (539, 281), (70, 35) */
+            NEXTSTATE Control;
+    endstate;
+endprocess Ks;

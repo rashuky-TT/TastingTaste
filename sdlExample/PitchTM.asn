@@ -1,0 +1,13 @@
+PitchTM DEFINITIONS ::= BEGIN
+
+PITCH-VALUE ::= REAL(-90.0 .. 90.0)
+RESOLUTION ::= INTEGER(10 .. 16)
+VALIDITY ::= ENUMERATED { valid, invalid }
+
+PITCH-SEQ ::= SEQUENCE {
+    pitchVal  PITCH-VALUE,
+    res RESOLUTION,
+    vali    VALIDITY
+}
+
+END

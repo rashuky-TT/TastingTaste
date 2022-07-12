@@ -1,0 +1,17 @@
+Ks-Datamodel DEFINITIONS ::=
+BEGIN
+IMPORTS
+   PITCH-VALUE, RESOLUTION, VALIDITY, PITCH-SEQ FROM PitchTM
+   MyInteger FROM CPPEXAMPLE-DATAVIEW
+   T-Int32, T-UInt32, T-Int8, T-UInt8, T-Boolean, T-Null-Record FROM TASTE-BasicTypes;
+
+Ks-States ::= ENUMERATED {control, idle}
+
+Ks-Context ::= SEQUENCE {
+   state Ks-States,
+   init-done BOOLEAN,
+   pitch PITCH-SEQ,
+   targetpitch PITCH-VALUE
+}
+
+END
