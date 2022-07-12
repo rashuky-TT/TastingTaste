@@ -2,3 +2,5 @@ build
 Debug
 binaries
 glue_debug
+
+skeletons_built
