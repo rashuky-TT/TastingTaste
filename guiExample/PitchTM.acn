@@ -1,0 +1,13 @@
+PitchTM DEFINITIONS ::= BEGIN
+
+PITCH-VALUE [encoding IEEE754-1985-32]
+RESOLUTION [size 8, encoding pos-int]
+VALIDITY [size 8, encoding pos-int]
+
+PITCH-SEQ [] {
+    pitchVal  [],
+    res [],
+    vali    []
+}
+
+END
