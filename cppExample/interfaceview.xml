@@ -1,0 +1,16 @@
+<InterfaceView asn1file="cppExample.acn">
+<Function name="EGSE" is_type="NO" language="SDL" default_implementation="default" FPGA_Configurations="">
+    <Property name="Taste::coordinates" value="70100 14600 90100 22600"/>
+    <Implementations>
+        <Implementation name="default" language="SDL"/>
+    </Implementations>
+</Function>
+
+<Function name="KS" is_type="NO" language="SDL" default_implementation="default" FPGA_Configurations="">
+    <Property name="Taste::coordinates" value="15900 14500 35900 22500"/>
+    <Implementations>
+        <Implementation name="default" language="SDL"/>
+    </Implementations>
+</Function>
+
+</InterfaceView>
