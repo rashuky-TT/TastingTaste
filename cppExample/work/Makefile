@@ -3,7 +3,7 @@ MAKEFILE_PATH   := $(lastword $(MAKEFILE_LIST))
 TOOL_INST       := $(shell taste-config --prefix)
 OUTDIR          := $(dir $(MAKEFILE_PATH))
 TASTE_SHARED_TYPES?=${HOME}/.local/share/QtProject/QtCreator/shared_types
-ASN1_FILES      := ../cppExample.asn ${TOOL_INST}/share/taste-types/taste-types.asn
+ASN1_FILES      := ../PitchTM.asn ../cppExample.asn ${TOOL_INST}/share/taste-types/taste-types.asn
 CP_FILES        :=       # Context parameters
 DATAVIEW_PATH   := ${OUTDIR}/dataview
 DATAVIEW_UNIQ   := ${DATAVIEW_PATH}/dataview-uniq.asn
@@ -22,15 +22,7 @@ check_targets:
 	$(MAKE) -C build -f Makefile.taste check_targets
 
 # Generate the language-specific data view needed before editing user code
-dataview:	dataview/C/built dataview/Ada/built
-	# Copy the dataview to SDL function EGSE (no context parameters)
-	cp -u ${DATAVIEW_UNIQ} egse/SDL/src
-	# Compute MD5 of the dataview, needed to decide if code needs to be re-generated
-	md5sum -c "egse/SDL/src/dataview.md5"  &> /dev/null || md5sum  "egse/SDL/src/dataview-uniq.asn" >  "egse/SDL/src/dataview.md5"
-	# Copy the dataview to SDL function KS (no context parameters)
-	cp -u ${DATAVIEW_UNIQ} ks/SDL/src
-	# Compute MD5 of the dataview, needed to decide if code needs to be re-generated
-	md5sum -c "ks/SDL/src/dataview.md5"  &> /dev/null || md5sum  "ks/SDL/src/dataview-uniq.asn" >  "ks/SDL/src/dataview.md5"
+dataview:	dataview/C/built
 
 # Generate the complete dataview, including Python bindings if there is a GUI
 ${DATAVIEW_PATH}/built:	dataview
@@ -66,7 +58,7 @@ ${DATAVIEW_UNIQ}:	${ASN1_FILES}
 	sed -e '$$s/$$/\n/' -s $^ > $@
 
 # Create dataview-uniq.acn by concatenating all input files
-${DATAVIEW_ACN}:	../cppExample.acn
+${DATAVIEW_ACN}:	../cppExample.acn ../PitchTM.acn
 	mkdir -p ${DATAVIEW_PATH}
 	sed -e '$$s/$$/\n/' -s $^ > $@
 
@@ -75,7 +67,7 @@ build/system_config.h:	$(wildcard */*/wrappers/*_system_config.h)
 	cat $^ > $@
 
 #  Call DMT/aadl2glueC to generate glue code from the mini-cv.aadl files
-aadl2glueC:	egse/SDL/wrappers/aadl2glueC_built ks/SDL/wrappers/aadl2glueC_built
+aadl2glueC:	egse/CPP/wrappers/aadl2glueC_built ks/CPP/wrappers/aadl2glueC_built
 
 # Build dataview.aadl in AADLv1 format, used by DMT to generate glue code
 ${DATAVIEW_AADLV1}: ${DATAVIEW_UNIQ}
@@ -85,11 +77,11 @@ ${DATAVIEW_AADLV1}: ${DATAVIEW_UNIQ}
 ${DATAVIEW_AADLV2}: ${DATAVIEW_UNIQ}
 	asn2aadlPlus --aadlv2  $< $@
 
-egse/SDL/wrappers/aadl2glueC_built: egse/SDL/wrappers/egse_mini_cv.aadl ${DATAVIEW_AADLV1}
+egse/CPP/wrappers/aadl2glueC_built: egse/CPP/wrappers/egse_mini_cv.aadl ${DATAVIEW_AADLV1}
 	aadl2glueC -allboards -o $(dir $@) $^
 	touch $@
 
-ks/SDL/wrappers/aadl2glueC_built: ks/SDL/wrappers/ks_mini_cv.aadl ${DATAVIEW_AADLV1}
+ks/CPP/wrappers/aadl2glueC_built: ks/CPP/wrappers/ks_mini_cv.aadl ${DATAVIEW_AADLV1}
 	aadl2glueC -allboards -o $(dir $@) $^
 	touch $@
 
@@ -107,11 +99,6 @@ dataview/C/built: ${DATAVIEW_UNIQ} ${DATAVIEW_ACN} ${CP_FILES}
 	touch $@
 
 
-dataview/Ada/built: ${DATAVIEW_UNIQ} ${CP_FILES}
-	mkdir -p $(dir $@)
-	asn2dataModel -allboards -o $(dir $@) -toAda $^
-	touch $@
-	cd dataview/Ada && rm -f gnat.cfg GPS_project.gpr IgnoredExaminerWarnings.wrn runSpark.sh
 
 clean:
 	rm -rf binaries dataview

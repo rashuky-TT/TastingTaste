@@ -12,13 +12,78 @@ PUBLIC
 WITH Taste;
 WITH DataView;
 WITH TASTE_IV_Properties;
+WITH interfaceview::IV::KS;
+
+SUBPROGRAM PI_GetPitchValue
+FEATURES
+    pitchData : IN PARAMETER DataView::PITCH_SEQ {
+       Taste::encoding => NATIVE;
+    };
+END PI_GetPitchValue;
+
+SUBPROGRAM IMPLEMENTATION PI_GetPitchValue.others
+END PI_GetPitchValue.others;
+
+
+SUBPROGRAM PI_CyclicTask
+END PI_CyclicTask;
+
+SUBPROGRAM IMPLEMENTATION PI_CyclicTask.others
+END PI_CyclicTask.others;
+
+
+SUBPROGRAM RI_SetTargetPitch
+FEATURES
+    pitch : IN PARAMETER DataView::PITCH_VALUE {
+       Taste::encoding => NATIVE;
+    };
+END RI_SetTargetPitch;
+
+SUBPROGRAM IMPLEMENTATION RI_SetTargetPitch.others
+END RI_SetTargetPitch.others;
+
 
 
 SYSTEM EGSE
+FEATURES
+   PI_GetPitchValue : PROVIDES SUBPROGRAM ACCESS interfaceview::IV:: EGSE:: PI_GetPitchValue.others {
+      Taste::InterfaceName           => "GetPitchValue";            
+      Taste::RCMoperationKind        => sporadic;      
+      -- Unrecognized property: enable_multicast => false      
+      -- Unrecognized property: layer => default      
+      Compute_Execution_Time => 0 ms .. 0 ms;      
+      Taste::Associated_Queue_Size   => 1;      
+      Taste::Interface_Stack_Size    => 1024;      
+      Taste::Interface_Priority      => 1;      
+      Taste::RCMperiod               => 0 ms;      
+   };
+   PI_CyclicTask : PROVIDES SUBPROGRAM ACCESS interfaceview::IV:: EGSE:: PI_CyclicTask.others {
+      Taste::InterfaceName           => "CyclicTask";            
+      Taste::RCMoperationKind        => cyclic;      
+      -- Unrecognized property: enable_multicast => false      
+      -- Unrecognized property: layer => default      
+      Compute_Execution_Time => 0 ms .. 0 ms;      
+      Taste::Interface_Stack_Size    => 1024;      
+      Taste::Interface_Priority      => 1;      
+      Taste::Interface_Cyclic_Offset => 0;      
+      Taste::RCMperiod               => 10000 ms;      
+   };
+   RI_SetTargetPitch : REQUIRES SUBPROGRAM ACCESS interfaceview::IV:: KS:: PI_SetTargetPitch.others {
+      Taste::labelInheritance        => "true";
+      Taste::InterfaceName           => "SetTargetPitch";            
+      Taste::RCMoperationKind        => sporadic;      
+      -- Unrecognized property: enable_multicast => false      
+      -- Unrecognized property: layer => default      
+      Compute_Execution_Time => 0 ms .. 0 ms;      
+      Taste::Associated_Queue_Size   => 1;      
+      Taste::Interface_Stack_Size    => 1024;      
+      Taste::Interface_Priority      => 1;      
+      Taste::RCMperiod               => 0 ms;      
+   };
 PROPERTIES
    -- ignored property: name = EGSE
    -- ignored property: is_type = NO
-   Source_Language => (SDL);
+   Source_Language => (CPP);
    -- ignored property: default_implementation = default
    -- ignored property: FPGA_Configurations = 
 END EGSE;
@@ -36,13 +101,78 @@ PUBLIC
 WITH Taste;
 WITH DataView;
 WITH TASTE_IV_Properties;
+WITH interfaceview::IV::EGSE;
+
+SUBPROGRAM PI_PitchControlLoop
+END PI_PitchControlLoop;
+
+SUBPROGRAM IMPLEMENTATION PI_PitchControlLoop.others
+END PI_PitchControlLoop.others;
+
+
+SUBPROGRAM PI_SetTargetPitch
+FEATURES
+    pitch : IN PARAMETER DataView::PITCH_VALUE {
+       Taste::encoding => NATIVE;
+    };
+END PI_SetTargetPitch;
+
+SUBPROGRAM IMPLEMENTATION PI_SetTargetPitch.others
+END PI_SetTargetPitch.others;
+
+
+SUBPROGRAM RI_GetPitchValue
+FEATURES
+    pitchData : IN PARAMETER DataView::PITCH_SEQ {
+       Taste::encoding => NATIVE;
+    };
+END RI_GetPitchValue;
+
+SUBPROGRAM IMPLEMENTATION RI_GetPitchValue.others
+END RI_GetPitchValue.others;
+
 
 
 SYSTEM KS
+FEATURES
+   PI_PitchControlLoop : PROVIDES SUBPROGRAM ACCESS interfaceview::IV:: KS:: PI_PitchControlLoop.others {
+      Taste::InterfaceName           => "PitchControlLoop";            
+      Taste::RCMoperationKind        => cyclic;      
+      -- Unrecognized property: enable_multicast => false      
+      -- Unrecognized property: layer => default      
+      Compute_Execution_Time => 0 ms .. 0 ms;      
+      Taste::Interface_Stack_Size    => 1024;      
+      Taste::Interface_Priority      => 1;      
+      Taste::Interface_Cyclic_Offset => 0;      
+      Taste::RCMperiod               => 1000 ms;      
+   };
+   PI_SetTargetPitch : PROVIDES SUBPROGRAM ACCESS interfaceview::IV:: KS:: PI_SetTargetPitch.others {
+      Taste::InterfaceName           => "SetTargetPitch";            
+      Taste::RCMoperationKind        => sporadic;      
+      -- Unrecognized property: enable_multicast => false      
+      -- Unrecognized property: layer => default      
+      Compute_Execution_Time => 0 ms .. 0 ms;      
+      Taste::Associated_Queue_Size   => 1;      
+      Taste::Interface_Stack_Size    => 1024;      
+      Taste::Interface_Priority      => 1;      
+      Taste::RCMperiod               => 0 ms;      
+   };
+   RI_GetPitchValue : REQUIRES SUBPROGRAM ACCESS interfaceview::IV:: EGSE:: PI_GetPitchValue.others {
+      Taste::labelInheritance        => "true";
+      Taste::InterfaceName           => "GetPitchValue";            
+      Taste::RCMoperationKind        => sporadic;      
+      -- Unrecognized property: enable_multicast => false      
+      -- Unrecognized property: layer => default      
+      Compute_Execution_Time => 0 ms .. 0 ms;      
+      Taste::Associated_Queue_Size   => 1;      
+      Taste::Interface_Stack_Size    => 1024;      
+      Taste::Interface_Priority      => 1;      
+      Taste::RCMperiod               => 0 ms;      
+   };
 PROPERTIES
    -- ignored property: name = KS
    -- ignored property: is_type = NO
-   Source_Language => (SDL);
+   Source_Language => (CPP);
    -- ignored property: default_implementation = default
    -- ignored property: FPGA_Configurations = 
 END KS;
@@ -72,6 +202,9 @@ SYSTEM IMPLEMENTATION interfaceview.others
 SUBCOMPONENTS
   EGSE : SYSTEM interfaceview::IV::EGSE::EGSE.others;
   KS : SYSTEM interfaceview::IV::KS::KS.others;
+CONNECTIONS
+   KS_RI_GetPitchValue_EGSE_PI_GetPitchValue : SUBPROGRAM ACCESS EGSE.PI_GetPitchValue -> KS.RI_GetPitchValue;
+   EGSE_RI_SetTargetPitch_KS_PI_SetTargetPitch : SUBPROGRAM ACCESS KS.PI_SetTargetPitch -> EGSE.RI_SetTargetPitch;
 END interfaceview.others;
 
 PROPERTIES

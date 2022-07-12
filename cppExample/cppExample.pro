@@ -3,7 +3,9 @@ CONFIG -= qt
 CONFIG += generateC
 
 DISTFILES +=  $(HOME)/tool-inst/share/taste-types/taste-types.asn \
-    target.dv.xml
+    target.dv.xml \
+    PitchTM.acn \
+    PitchTM.asn
 DISTFILES += cppExample.asn
 DISTFILES += cppExample.acn
 DISTFILES += cppExample.msc

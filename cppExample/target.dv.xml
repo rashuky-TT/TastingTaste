@@ -3,6 +3,7 @@
         <Property name="Taste::coordinates" value="64600 27500 80600 43500"/>
         <Partition name="Partition_2">
             <Property name="Taste::coordinates" value="69000 31900 77000 39900"/>
+            <Function name="KS" path="KS"/>
         </Partition>
         <Device name="eth0" requires_bus_access="ocarina_buses::ip.generic" port="eth0" asn1file="/home/taste/tool-inst/include/TASTE-Linux-Drivers/configurations/linux-socket-ip-driver.asn" asn1type="Socket-IP-Conf-T" asn1module="LINUX-SOCKET-IP-DRIVER" impl_extends="ocarina_drivers::ip_socket.linux" bus_namespace="ocarina_buses" namespace="ocarina_drivers" extends="ocarina_drivers::ip_socket">
             <Property name="Taste::coordinates" value="64600 29200"/>
@@ -15,6 +16,7 @@
         <Property name="Taste::coordinates" value="16400 26900 32400 42900"/>
         <Partition name="Partition_1">
             <Property name="Taste::coordinates" value="20800 31300 28800 39300"/>
+            <Function name="EGSE" path="EGSE"/>
         </Partition>
         <Device name="eth0" requires_bus_access="ocarina_buses::ip.generic" port="eth0" asn1file="/home/taste/tool-inst/include/TASTE-Linux-Drivers/configurations/linux-socket-ip-driver.asn" asn1type="Socket-IP-Conf-T" asn1module="LINUX-SOCKET-IP-DRIVER" impl_extends="ocarina_drivers::ip_socket.linux" bus_namespace="ocarina_buses" namespace="ocarina_drivers" extends="ocarina_drivers::ip_socket">
             <Property name="Taste::coordinates" value="16400 28600"/>
@@ -25,5 +27,7 @@
     </Node>
     <Connection name="Connection_1" from_node="x86 Linux CPP_2" from_port="uart0" to_bus="ocarina_buses::serial.ccsds" to_node="x86 Linux CPP_1" to_port="uart0">
             <Property name="Taste::coordinates" value="33400 33300 63600 33300"/>
+            <Message name="Message_1" from_function="EGSE" from_interface="SetTargetPitch" to_function="KS" to_interface="SetTargetPitch"/>
+            <Message name="Message_2" from_function="KS" from_interface="GetPitchValue" to_function="EGSE" to_interface="GetPitchValue"/>
     </Connection>
 </DeploymentView>
